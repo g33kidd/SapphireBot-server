@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <!-- Simply include the sails.io.js script, and a client socket will be created and auto-connected for you -->
+  <script type="text/javascript" src="/js/dependencies/sails.io.js"></script>
+  <script type="text/javascript">
+
+  io.socket.get('/twitch/subscribe', console.log)
+  io.socket.on('twitchMessage', console.log)
+  
+  </script>
+
+</body>
+</html>
