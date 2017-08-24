@@ -1,19 +1,34 @@
+const axios = require('axios')
+
+// TODO: Implement auth flow for twitch. Instead of setting it this way..
+const api   = axios.create({
+  baseURL: 'https://api.twitch.tv/kraken/',
+  timeout: 1000,
+  headers: {
+    'Client-ID': sails.config.twitch.clientId,
+    'Authorization': `OAuth ${sails.config.twitch.oauth}`
+  }
+})
+
 module.exports = {
 
-  client: () => sails.hooks.twitch.client(),
-  channel: () => sails.hooks.twitch.channel(),
-  nickname: () => sails.hooks.twitch.nickname(),
-
-  say (message) {
-    this.client().say(this.channel(), message)
+  channel () {
+    return api.get('channel')
+      .then(res => res.data)
   },
 
-  slowmode () {
-    this.client().slow(this.channel(), 300)
+  searchChannels (query) {
+    return api.get('search/channels', { params: { query: query } })
+      .then(res => res.data)
   },
 
-  slowmodeOff () {
-    this.client().slowoff(this.channel())
-  }
+  findChannel (name) {
+    return this.searchChannels(name)
+      .then(data => data.channels.find(c => c.name === name))
+  },
+
+  followers () {},
+
+  subscribers () {},
 
 }
