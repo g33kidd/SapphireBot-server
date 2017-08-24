@@ -1,0 +1,27 @@
+- Bot Management
+  - Twitch Bot
+  - Discord Bot
+  - Integration Between bots
+  - Commands
+
+- Current Stream
+  - List Viewers
+    - Manage
+  - View Chat
+
+- Manage Discord Roles 
+  - Followers
+  - Subscribers
+  - Regulars + Promotions
+
+- Manage Twitch
+  - Moderators
+  - Change Title/Game
+
+- Stream Stats
+  - Current Stream
+  - Today/week/month
+
+- Plugin Management
+  - Twitch/Discord
+  - Turn plugins on/off

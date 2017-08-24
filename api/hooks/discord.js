@@ -36,6 +36,12 @@ module.exports = function discord(sails) {
 
   // Functions here should be helper methods for DiscordJS
   return {
-    client: () => client
+    client: () => client,
+    status: () => {
+      return {
+        status: client.status,
+        uptime: client.uptime
+      }
+    }
   }
 };

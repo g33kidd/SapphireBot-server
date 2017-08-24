@@ -5,6 +5,8 @@ const path       = require('path')
 
 module.exports = function twitch(sails) {
 
+  this.test = "Hello!"
+
   sails.log.debug("Loading twitch hook...")
 
   var channel   = sails.config.twitch.channel
@@ -63,5 +65,12 @@ module.exports = function twitch(sails) {
     client: () => client,
     channel: () => channel,
     nickname: () => nickname,
+
+    // TODO: More information..
+    status: () => {
+      return {
+        status: client.readyState()
+      }
+    }
   }
 };

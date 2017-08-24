@@ -5,6 +5,7 @@ const api   = axios.create({
   baseURL: 'https://api.twitch.tv/kraken/',
   timeout: 1000,
   headers: {
+    'Accept': 'application/vnd.twitchtv.v5+json',
     'Client-ID': sails.config.twitch.clientId,
     'Authorization': `OAuth ${sails.config.twitch.oauth}`
   }

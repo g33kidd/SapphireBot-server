@@ -18,12 +18,10 @@ module.exports = {
              .addField('Followers', channel.followers, true)
 
         TwitchService.stream(channel._id).then(stream => {
-
-          console.log(stream)
           if (stream != null) {
-            embed.setImage(stream.preview.large)         
+            embed.addField('Viewers', stream.viewers, true)
+                 .setImage(stream.preview.large)         
                  .setDescription(`Currently streaming in ${stream.game}.`) 
-                 .addField('Viewers', stream.viewers, true)
           } else {
             embed.setImage(channel.video_banner)
                  .setDescription(`Currently offline. Last seen playing ${channel.game}`)
