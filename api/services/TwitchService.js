@@ -17,6 +17,13 @@ module.exports = {
       .then(res => res.data)
   },
 
+  stream (id) {
+    return api.get(`streams/${id}`)
+      .then(res => {
+        return res.data.stream
+      })
+  },
+
   searchChannels (query) {
     return api.get('search/channels', { params: { query: query } })
       .then(res => res.data)
