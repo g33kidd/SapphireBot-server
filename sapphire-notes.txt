@@ -1,3 +1,13 @@
+TODO
+
+- vuex is a given in this instance
+- list followers
+- list subscribers
+- emit socket events for MOST TMIjs events
+  - display these events in an event viewer
+  - save the events to DB
+- manage commands for twitch and discord
+
 - Bot Management
   - Twitch Bot
   - Discord Bot
@@ -8,20 +18,30 @@
   - List Viewers
     - Manage
   - View Chat
+  - Manage Twitch
+  - Moderators
+  - Change Title/Game
 
 - Manage Discord Roles 
   - Followers
   - Subscribers
   - Regulars + Promotions
 
-- Manage Twitch
-  - Moderators
-  - Change Title/Game
-
 - Stream Stats
   - Current Stream
   - Today/week/month
 
 - Plugin Management
+  - Can plugins add their own UI stuff?
   - Twitch/Discord
   - Turn plugins on/off
+
+- Other integrations
+  - WebHooks for various services for outside events?
+  - Send data in JSON format for outside events?
+    - would be useful if there were plans to implement Overlay stuff.
+    - i want to be able to send JSON data to my Overlay from desktop apps
+      - keystrokes per day, etc...
+    - this way things you don't want to run on PC can run on the server... 
+  - Patreon for getting information through commands and stuff.
+    - !patreon - returns embed of information about the users patreon page.

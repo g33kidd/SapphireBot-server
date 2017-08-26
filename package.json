@@ -6,6 +6,7 @@
   "keywords": [],
   "dependencies": {
     "axios": "^0.16.2",
+    "cron": "^1.2.1",
     "discord.js": "^11.1.0",
     "ejs": "2.3.4",
     "grunt": "1.0.1",

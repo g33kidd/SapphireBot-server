@@ -1,39 +1,62 @@
 module.exports = {
+  // TODO: How the heck do I list routes in a sails project `sails list routes` ?
 
-  slowmode: (req, res) => {
+  // TODO: ORRRR... toggle
+  async slowmode (req, res) {
     TmiService.slowmodeOff()
   },
-
-  followers: (req, res) => {
-    let followerList = TwitchService.followers()
+  
+  async followers (req, res) {
+    let followerList = await TwitchService.followers()
     return res.json(followerList)
   },
 
-  subscribers: (req, res) => {
-    let subscriberList = TwitchService.subscribers()
+  async chatters (req, res) {
+    let chatters = await TmiService.chatters()
+    console.log(chatters)
+    return res.json(chatters)
+  },
+
+  async subscribers (req, res) {
+    let subscriberList = await TwitchService.subscribers()
     return res.json(subscriberList)
   },
 
-  liveStats: (req, res) => {
-    let stats = TwitchService.liveStats()
+  async live (req, res) {
+    let channel = await TwitchService.channel()
+    let stream  = await TwitchService.stream(channel._id)
+    return res.json(stream)
+  },
+
+  async updateChannel (req, res) {
+    let channel = await TwitchService.channel()
+    let updateResp = await TwitchService.updateChannel(channel._id, req.body)
+
+    return res.ok()
+  },
+
+  async stats (req, res) {
+    let stats = await TwitchService.stats()
     return res.json(stats)
   },
 
-  stats: (req, res) => {
-    let stats = TwitchService.stats()
-    return res.json(stats)
-  },
-
-  subscribe: (req, res) => {
+  async subscribe (req, res) {
     if (!req.isSocket) return res.badRequest()
-    sails.sockets.join(req, "twitchChannel")
+    sails.sockets.join(req, "twitch:channel")
     return res.json({subscribed: true})
   },
 
   // Sends chat a message to checkout some other channel.
-  shoutout: (req, res) => {
-    TmiService.shoutout(req.param('channel')).then(sent => {
-      return res.json({sent})
-    })
+  async shoutout (req, res) {
+    try {
+      let channel = await TmiService.shoutout(req.param('channel'))
+
+      // if (req.param('with_host')) {
+      //   await TmiService.host(req.param('channel'))
+      // }
+      return res.ok()
+    } catch(err) {
+      return res.serverError(err)
+    }
   }
 }

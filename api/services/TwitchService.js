@@ -1,9 +1,9 @@
 const axios = require('axios')
 
 // TODO: Implement auth flow for twitch. Instead of setting it this way..
+// TODO: put this in a service? or hook?
 const api   = axios.create({
   baseURL: 'https://api.twitch.tv/kraken/',
-  timeout: 1000,
   headers: {
     'Accept': 'application/vnd.twitchtv.v5+json',
     'Client-ID': sails.config.twitch.clientId,
@@ -20,9 +20,7 @@ module.exports = {
 
   stream (id) {
     return api.get(`streams/${id}`)
-      .then(res => {
-        return res.data.stream
-      })
+      .then(res => res.data.stream)
   },
 
   searchChannels (query) {
@@ -35,8 +33,21 @@ module.exports = {
       .then(data => data.channels.find(c => c.name === name))
   },
 
-  followers () {},
+  followers (id) {
+    return api.get(`channels/${id}/follows`)
+      .then(res => res.data)
+  },
 
-  subscribers () {},
+  subscribers (id) {
+    return api.get(`channels/${id}/subscriptions`)
+      .then(res => res.data)
+  },
+
+  // NOTE: This gives a Timeout error because of Axios for some reason???
+  // Only happens sometimes ¯\_(ツ)_/¯ pls fix...
+  updateChannel (id, channel) {
+    return api.put(`channels/${id}`, { channel })
+      .then(res => res.data)
+  }
 
 }

@@ -6,21 +6,41 @@
  * the TwitchService.
  */
 
+const axios = require('axios')
+const api   = axios.create({
+  baseURL: 'https://tmi.twitch.tv'
+})
+
 module.exports = {
 
   client: () => sails.hooks.twitch.client(),
   channel: () => sails.hooks.twitch.channel(),
   nickname: () => sails.hooks.twitch.nickname(),
 
-  shoutout (channel) {
-    return TwitchService.findChannel(channel).then(data => {
-      if (typeof(data) != 'undefined') {
-        this.say(`PogChamp Go checkout this stream! ${data.url} Last seen playing: ${data.game}`)
-        return true
-      } else {
-        return false
-      }
-    })
+  async shoutout (channel) {
+    let data = await TwitchService.findChannel(channel)
+    if (typeof(data) != 'undefined') {
+      this.say(`PogChamp Go checkout this stream! ${data.url} Last seen playing: ${data.game}`)
+      return true
+    } else {
+      return false
+    }
+  },
+
+  // Just gets all chatters in the room..
+  // TODO: WTF WTF WTF
+  chatters (channel) {
+    return api.get(`group/user/${channel}/chatters`)
+      .then(res => console.log('chatters', res.data))
+  },
+
+  // TODO:
+  host (channel) {
+    this.client.host(this.channel(), channel).then(function(data) {
+      console.log(data)
+    }).catch(function(err) {
+      console.log("error hosting", err)
+    });  
   },
 
   say (message) {

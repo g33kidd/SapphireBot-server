@@ -5,7 +5,7 @@ module.exports = {
     // If null, means discord and twitch.
     service: {
       type: 'string',
-      defaultTo: null
+      defaultsTo: null
     },
 
     signature: {
@@ -14,7 +14,7 @@ module.exports = {
 
     content: {
       type: 'text',
-      defaultTo: "Default command text... Change me!"
+      defaultsTo: "Default command text... Change me!"
     }
   }
 }
