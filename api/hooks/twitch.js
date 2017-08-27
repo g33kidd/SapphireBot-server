@@ -1,64 +1,43 @@
-const _          = require('lodash')
-const includeAll = require('include-all')
 const Twitch     = require('tmi.js')
-const path       = require('path')
+const hookUtils  = require('../utils/hookUtils.js')
+const _          = require('lodash')
+
+// TODO: Move all event stuff into plugins. Just bind all these events.
 
 module.exports = function twitch(sails) {
 
-  const pluginPath  = path.join(sails.config.appPath, 'api', 'plugins')  
-
-  // Load Discord plugins
-  // Loads plugins that are in the format of `<Thing>Plugin.js` in the plugins folder.
-  const filePlugins = includeAll({
-    dirname: path.join(pluginPath),
-    filter: /(.+Plugin)\.js$/,
-    excludeDirs: /(discord|twitch)$/
-  })
-
-  // Loads plugins that are in the plugins/discord folder.
-  const folderPlugins = includeAll({
-    dirname: path.join(pluginPath, 'twitch'),
-    filter: /(.+)\.js$/
-  })
-
+  const plugins   = hookUtils.loadPlugins('twitch')
   const channel   = sails.config.twitch.channel
   const nickname  = sails.config.twitch.botNick
   const client    = new Twitch.client(sails.config.twitch)
 
-  // Bind the events for each plugin to the `message` event from Discord.
-  // TODO: Add more events.
-  _.each(filePlugins, plugin => {
-    if(plugin.service == 'twitch') {
-      client.on('message', (channel, userstate, message, self) => {
-        plugin.events.message({ channel, userstate, message, self, client })
-      })
-    } else if(plugin.service == null) {
-      client.on('message', (channel, userstate, message, self) => {
-        plugin.events.twitch.message({ channel, userstate, message, self, client })
-      })
-    }
-  })
+  // TODO: Look over this one again sometime...
+  // NOTE: This could be nice for specific events where we don't care
+  // about the parameters and just give the plugin function everything.
+  // const events = [
+  //   'join',
+  //   'disconnected',
+  //   'reconnect'
+  // ]
 
-  // bind the events for folder plugins.
-  _.each(folderPlugins, plugin => {
-    client.on('message', (channel, userstate, message, self) => {
-      plugin.events.message({ channel, userstate, message, self, client })
-    })
-  })
+  // _.each(events, e => {
+  //   _.each(plugins, p => {
+  //     let isValidService = (p.service === 'twitch' || p.service === null)
+  //     if (p.events[e] && isValidService) {
+  //       client.on(e, p.events[e])
+  //     }
+  //   })
+  // })
 
-  // Poll for followers here?
-
-  // For relaying chat messages from Discord to Twitch
-  sails.on('discord:message', (message) => {
-    if (message.author.bot) return;
-    if (message.channel.id == '350002088723349514') {
-      client.say(channel, `[Discord] ${message.author.username} said: ${message.content}`)
-    }
-  })
+  // sails.on('discord:message', (message) => {
+  //   if (message.author.bot) return;
+  //   if (message.channel.id == '350002088723349514') {
+  //     client.say(channel, `[Discord] ${message.author.username} said: ${message.content}`)
+  //   }
+  // })
 
   // When somebody joins the twitch chat.
   client.on('join', (channel, username, self) => {
-    // client.say(channel, `welcome ${username} Kappa`)
     sails.sockets.broadcast('twitch:channel', 'twitch:join', { channel, username })
   })
 
@@ -74,17 +53,14 @@ module.exports = function twitch(sails) {
     sails.sockets.broadcast('status', 'twitch:status', {})
   })
 
-  // New message received..
   client.on('message', (channel, userstate, message, self) => {
     if (self) return;
+    
+    let params = {channel, userstate, message}
 
-    sails.emit('twitch:message', { channel, userstate, message, self })
-    sails.sockets.broadcast('twitch:channel', 'twitch:message', {
-      channel, 
-      userstate, 
-      message, 
-      is_bot: self
-    })
+    _.each(plugins, p => p.events.message(params))
+    sails.emit('twitch:message', params)
+    sails.sockets.broadcast('twitch:channel', 'twitch:message', params)
   })
 
   // Connect the client.

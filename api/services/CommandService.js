@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 module.exports = {
 
   parse (signature, message, args) {
@@ -17,25 +19,44 @@ module.exports = {
     return res
   },
 
-  addcom (content, service) {
+  addCommand (content, service) {
     let cmd = this.parse('!add-cmd', content, ['signature', 'content'])
-    if (!cmd.valid) return;
+    if (!cmd.valid) return false;
 
-    Command.create({
+    return Command.create({
       service,
       signature: cmd.signature,
       content: cmd.content
-    }).exec((err, record) => {
-      console.log(err)
-      console.log(record)
     })
   },
 
-  delcom (content, service) {
+  deleteCommand (content, service) {
     let cmd = this.parse('!del-cmd', content, ['signature'])
+    if(!cmd.valid) return false;
+
+    return Command.destroy({
+      where: {
+        service: service,
+        signature: cmd.signature
+      }
+    })
   },
 
-  updatecom (content, service) {
+  updateCommand (content, service) {
     let cmd = this.parse('!update-cmd', content, ['signature', 'content'])
+    if(!cmd.valid) return false;
+    
+    return Command.update({
+      service: service,
+      signature: cmd.signature
+    }, {
+      content: cmd.content
+    })
+  },
+
+  findCommand (content, service) {
+    return Command.find({
+      where: { service }
+    }).then(stuff => stuff)
   }
 }
