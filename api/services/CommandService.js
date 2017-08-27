@@ -1,31 +1,20 @@
 module.exports = {
 
-  // TODO: Probably clean this up and find any bugs... just make it better 
   parse (signature, message, args) {
-    let result = { valid: false }
+    let res = { valid: false }
 
-    if (typeof(message) === 'undefined') return result;
-    if (!message.startsWith(signature)) return result;
+    if (typeof(message) === 'undefined') return res;
+    if (!message.startsWith(signature)) return res;
     
-    // Split the message and remove the signature.. we don't care about the sig at this point.
     let arr = message.split(' ')
-
-    // Get the rest of the args...
     let cmdArgs = arr.splice(0, args.length)
-
-    // Give me the rest of the arguments...
     cmdArgs.push(arr.join(' '))
-    
-    // Gets the real args specified by `args`
+
     let realArgs = cmdArgs.splice(1, args.length)
+    args.forEach((val, index) => res[val] = realArgs[index])
 
-    args.forEach((val, index) => {
-      result[val] = realArgs[index]
-    })
-
-    result.valid = true
-
-    return result
+    res.valid = true
+    return res
   },
 
   addcom (content, service) {
