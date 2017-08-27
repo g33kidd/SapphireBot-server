@@ -29,18 +29,15 @@ module.exports = {
 
   // Just gets all chatters in the room..
   // TODO: WTF WTF WTF
-  chatters (channel) {
-    return api.get(`group/user/${channel}/chatters`)
-      .then(res => console.log('chatters', res.data))
+  async chatters (channel) {
+    let res = await api.get(`group/user/${channel}/chatters`)
+    return res.data
   },
 
   // TODO:
-  host (channel) {
-    this.client.host(this.channel(), channel).then(function(data) {
-      console.log(data)
-    }).catch(function(err) {
-      console.log("error hosting", err)
-    });  
+  async host (channel) {
+    let res = await this.client.host(this.channel(), channel)
+    return res.data
   },
 
   say (message) {

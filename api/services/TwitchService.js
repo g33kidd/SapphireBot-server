@@ -13,41 +13,41 @@ const api   = axios.create({
 
 module.exports = {
 
-  channel () {
-    return api.get('channel')
-      .then(res => res.data)
+  async channel () {
+    let res = await api.get('channel')
+    return res.data
   },
 
-  stream (id) {
-    return api.get(`streams/${id}`)
-      .then(res => res.data.stream)
+  async stream (id) {
+    let res = await api.get(`streams/${id}`)
+    return res.data.stream
   },
 
-  searchChannels (query) {
-    return api.get('search/channels', { params: { query: query } })
-      .then(res => res.data)
+  async searchChannels (query) {
+    let res = await api.get('search/channels', { params: { query: query } })
+    return res.data
   },
 
-  findChannel (name) {
-    return this.searchChannels(name)
-      .then(data => data.channels.find(c => c.name === name))
+  async findChannel (name) {
+    let search = await this.searchChannels(name)
+    return search.channels.find(c => c.name === name)
   },
 
-  followers (id) {
-    return api.get(`channels/${id}/follows`)
-      .then(res => res.data)
+  async followers (id) {
+    let res = await api.get(`channels/${id}/follows`)
+    return res.data
   },
 
-  subscribers (id) {
-    return api.get(`channels/${id}/subscriptions`)
-      .then(res => res.data)
+  async subscribers (id) {
+    let res = await api.get(`channels/${id}/subscriptions`)
+    return res.data
   },
 
   // NOTE: This gives a Timeout error because of Axios for some reason???
   // Only happens sometimes ¯\_(ツ)_/¯ pls fix...
-  updateChannel (id, channel) {
-    return api.put(`channels/${id}`, { channel })
-      .then(res => res.data)
+  async updateChannel (id, channel) {
+    let res = await api.put(`channels/${id}`, { channel })
+    return res.data
   }
 
 }
