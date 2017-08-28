@@ -11,6 +11,11 @@ module.exports = {
     return res.json(followerList)
   },
 
+  async streams (req, res) {
+    let streams = await Stream.find()
+    return res.json(streams)
+  },
+
   async chatters (req, res) {
     let chatters = await TmiService.chatters()
     console.log(chatters)

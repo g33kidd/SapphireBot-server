@@ -1,6 +1,7 @@
 const Twitch     = require('tmi.js')
 const hookUtils  = require('../utils/hookUtils.js')
 const _          = require('lodash')
+const cron       = require('node-cron')
 
 // TODO: Move all event stuff into plugins. Just bind all these events.
 
@@ -11,11 +12,45 @@ module.exports = function twitch(sails) {
   const nickname  = sails.config.twitch.botNick
   const client    = new Twitch.client(sails.config.twitch)
 
-  setInterval(async () => {
+  // Look for new streams. Send events.
+  cron.schedule('*/10 * * * * *', async () => {
     let status = await TwitchService.live()
     sails.emit('twitch:status', status)
     sails.sockets.broadcast('status', 'stream:status', status)
-  }, 10000)
+
+    if(status) {
+      console.log("currently streaming...")
+      // console.log(status)
+      let created = status.created_at
+      let count   = await Stream.count({started_at: created})
+      let stream  = await Stream.findOne({started_at: created})
+      if (count === 0) {
+        let createdStream = await Stream.create({started_at: created, views: status.viewers})
+        console.log("created stream...")
+      } else {
+        let viewCount = stream.views
+        console.log(status.viewers)
+        if (viewCount < status.viewers) {
+          viewCount = status.viewers
+        }
+
+        await Stream.update({ started_at: created }, {
+          views: viewCount,
+          status: status.channel.status,
+          game: status.game
+        })
+        console.log("updated stream...")
+      }
+    } else {
+      console.log("no stream found...")
+    }
+  })
+
+  // setInterval(async () => {
+  //   let status = await TwitchService.live()
+  //   sails.emit('twitch:status', status)
+  //   sails.sockets.broadcast('status', 'stream:status', status)
+  // }, 10000)
 
   // TODO: Look over this one again sometime...
   // NOTE: This could be nice for specific events where we don't care
