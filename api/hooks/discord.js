@@ -12,6 +12,9 @@ module.exports = function discord(sails) {
   sails.on('twitch:status', async (status) => {
     if (status) {
       await client.user.setPresence({ game: { name: status.channel.status, url: status.channel.url, type: 0 } })
+      // Announcement doesn't work here... because it will be run every time the status check is run every 10000ms
+      // let guild = client.guilds.first()
+      // await guild.defaultChannel.send(`Woo! Now playing ${status.channel.status} at <${status.channel.url}>!`)
     } else {
       await client.user.setPresence({ game: { name: 'offline. Stream offline.', type: 0 } })
     }
