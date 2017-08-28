@@ -9,6 +9,8 @@ module.exports = function discord(sails) {
   const plugins = hookUtils.loadPlugins('discord')
   const client  = new Discord.Client()
 
+  // TODO: Create stream if this is a new stream detected.
+  // TODO: Announce if it's a new stream.
   sails.on('twitch:status', async (status) => {
     if (status) {
       await client.user.setPresence({ game: { name: status.channel.status, url: status.channel.url, type: 0 } })
