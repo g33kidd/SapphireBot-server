@@ -15,7 +15,7 @@ module.exports = function twitch(sails) {
     let status = await TwitchService.live()
     sails.emit('twitch:status', status)
     sails.sockets.broadcast('status', 'stream:status', status)
-  }, 500)
+  }, 10000)
 
   // TODO: Look over this one again sometime...
   // NOTE: This could be nice for specific events where we don't care

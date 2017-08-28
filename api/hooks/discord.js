@@ -9,12 +9,11 @@ module.exports = function discord(sails) {
   const plugins = hookUtils.loadPlugins('discord')
   const client  = new Discord.Client()
 
-  // setting the game works, but doesn't show up in the Discord UI ¯\_(ツ)_/¯
   sails.on('twitch:status', async (status) => {
     if (status) {
-      await client.user.setGame(status.channel.status, status.channel.url)
+      await client.user.setPresence({ game: { name: status.channel.status, url: status.channel.url, type: 0 } })
     } else {
-      await client.user.setGame('offline. Stream is offline.')
+      await client.user.setPresence({ game: { name: 'offline. Stream offline.', type: 0 } })
     }
   })
 
@@ -39,7 +38,7 @@ module.exports = function discord(sails) {
 
   client.on('message', message => {
     if (message.author.bot) return;
-    
+
     sails.emit('discord:message', message)
     _.each(plugins, p => p.events.message({ client, message }))
   })
