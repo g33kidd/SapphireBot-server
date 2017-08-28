@@ -24,6 +24,10 @@
 // > Note: This is not required in order to lift, but it is a convenient default.
 process.chdir(__dirname);
 
+if(process.env.NODE_ENV === 'development') {
+  require('dotenv').load()
+}
+
 // Attempt to import `sails`.
 var sails;
 try {
