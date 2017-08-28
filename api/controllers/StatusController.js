@@ -8,8 +8,8 @@ module.exports = {
   },
 
   async stream (req, res) {
-    let channel = TwitchService.channel()
-    let stream  = TwitchService.stream(channel._id)
+    let channel = await TwitchService.channel()
+    let stream  = await TwitchService.stream(channel._id)
 
     return res.json(stream)
   },

@@ -28,6 +28,12 @@ module.exports = {
     return res.data
   },
 
+  async live() {
+    let chan = await this.channel()
+    let stream = await this.stream(chan._id)
+    return stream
+  },
+
   async findChannel (name) {
     let search = await this.searchChannels(name)
     return search.channels.find(c => c.name === name)

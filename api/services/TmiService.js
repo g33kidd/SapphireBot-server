@@ -19,7 +19,7 @@ module.exports = {
 
   async shoutout (channel) {
     let data = await TwitchService.findChannel(channel)
-    if (typeof(data) != 'undefined') {
+    if (data) {
       this.say(`PogChamp Go checkout this stream! ${data.url} Last seen playing: ${data.game}`)
       return true
     } else {

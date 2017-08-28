@@ -51,9 +51,10 @@ module.exports = {
     try {
       let channel = await TmiService.shoutout(req.param('channel'))
 
-      // if (req.param('with_host')) {
-      //   await TmiService.host(req.param('channel'))
-      // }
+      if (req.param('with_host')) {
+        await TmiService.host(req.param('channel'))
+      }
+      
       return res.ok()
     } catch(err) {
       return res.serverError(err)

@@ -9,6 +9,15 @@ module.exports = function discord(sails) {
   const plugins = hookUtils.loadPlugins('discord')
   const client  = new Discord.Client()
 
+  // setting the game works, but doesn't show up in the Discord UI ¯\_(ツ)_/¯
+  sails.on('twitch:status', async (status) => {
+    if (status) {
+      await client.user.setGame(status.channel.status, status.channel.url)
+    } else {
+      await client.user.setGame('offline. Stream is offline.')
+    }
+  })
+
   // TODO: Make it possible to make this a plugin. Currently unable to because
   // we need access to `twitchMessage` event.
   // We don't want to do this here. This can be a plugin itself.

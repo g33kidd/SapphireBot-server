@@ -12,6 +12,11 @@ module.exports = {
       type: 'string'
     },
 
+    enabled: {
+      type: 'boolean',
+      defaultsTo: true
+    },
+
     content: {
       type: 'text',
       defaultsTo: "Default command text... Change me!"

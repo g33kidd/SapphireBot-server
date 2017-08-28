@@ -11,6 +11,12 @@ module.exports = function twitch(sails) {
   const nickname  = sails.config.twitch.botNick
   const client    = new Twitch.client(sails.config.twitch)
 
+  setInterval(async () => {
+    let status = await TwitchService.live()
+    sails.emit('twitch:status', status)
+    sails.sockets.broadcast('status', 'stream:status', status)
+  }, 500)
+
   // TODO: Look over this one again sometime...
   // NOTE: This could be nice for specific events where we don't care
   // about the parameters and just give the plugin function everything.
