@@ -1,15 +1,10 @@
-let settings = [
-	{ key: 'shoutouts_enabled', value: true },
-	{ key: 'announcement_channel', value: '' },
-	{ key: 'announcements_enabled', value: '' }
-]
-
 module.exports = {
 
-  async initBotSettings () {
+  initBotSettings () {
+  	console.log(sails.config.settings.discord)
   },
 
-  async initAppSettings () {
+  initAppSettings () {
   }
 
 }
