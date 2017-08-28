@@ -19,30 +19,29 @@ module.exports = function twitch(sails) {
     sails.sockets.broadcast('status', 'stream:status', status)
 
     if(status) {
-      console.log("currently streaming...")
-      // console.log(status)
+      sails.log.debug("currently streaming")
+
       let created = status.created_at
       let count   = await Stream.count({started_at: created})
       let stream  = await Stream.findOne({started_at: created})
+
       if (count === 0) {
-        let createdStream = await Stream.create({started_at: created, views: status.viewers})
-        console.log("created stream...")
+        await Stream.create({started_at: created, views: status.viewers})
       } else {
-        let viewCount = stream.views
-        console.log(status.viewers)
-        if (viewCount < status.viewers) {
-          viewCount = status.viewers
-        }
+        let viewCount = (stream.views < status.viewers) 
+          ? status.viewers 
+          : stream.views
 
         await Stream.update({ started_at: created }, {
           views: viewCount,
           status: status.channel.status,
           game: status.game
         })
-        console.log("updated stream...")
+        
+        sails.log.debug("updated stream")
       }
     } else {
-      console.log("no stream found...")
+      sails.log.debug("no stream found")
     }
   })
 
