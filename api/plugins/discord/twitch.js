@@ -9,22 +9,16 @@ module.exports = {
       let titleCommand = CommandService.parse('!title', message.content, ['status'])
       let gameCommand  = CommandService.parse('!game', message.content, ['game'])
 
-      if (titleCommand.valid) {
-        try {
+      try {
+        if (titleCommand.valid) {
           await TwitchService.updateChannel(chan._id, {status: titleCommand.status})
-          message.reply(`Okay. I've updated the channel status to **${titleCommand.status}**`)
-        } catch (err) {
-          message.reply(`Whoops... there was an error: ${err}`)
-        }
-      }
-
-      if (gameCommand.valid) {
-        try {
+          message.reply(`Okay. I've updated channel status to **${titleCommand.status}**`)
+        } else if (gameCommand.valid) {
           await TwitchService.updateChannel(chan._id, {game: gameCommand.game})
           message.reply(`Okay. I've updated the channel game to **${gameCommand.game}**`)
-        } catch (err) {
-          message.reply(`Whoops... there was an error: ${err}`)
         }
+      } catch(err) {
+        message.reply(`Whoops... there was an error: ${err}`)
       }
     }
   }
