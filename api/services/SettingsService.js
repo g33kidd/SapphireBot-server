@@ -16,8 +16,12 @@ module.exports = {
 
   async getWithFormat (key, obj) {
     let setting = await Settings.findOne({ key: key })
-    let format = formatUtils.format(setting.value, obj)
-    return format
+    if (setting) {
+      let format = formatUtils.format(setting.value, obj)
+      return format
+    } else {
+      return null
+    }
   }
 
 }

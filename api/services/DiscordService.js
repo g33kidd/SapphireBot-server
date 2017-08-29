@@ -12,7 +12,7 @@ module.exports = {
         let str = await SettingsService.getWithFormat('discord_shoutout_live_format', stream)
         this.client().guilds.first().defaultChannel.send(str)
       } else {
-        let str = await SettingsService.getWithFormat('discord_shotout_offline_format', data)
+        let str = await SettingsService.getWithFormat('discord_shoutout_offline_format', data)
         this.client().guilds.first().defaultChannel.send(str)
       }
     }

@@ -27,7 +27,7 @@ module.exports = {
         let str = await SettingsService.getWithFormat('twitch_shoutout_live_format', stream)
         this.say(str)
       } else {
-        let str = await SettingsService.getWithFormat('twitch_shotout_offline_format', data)
+        let str = await SettingsService.getWithFormat('twitch_shoutout_offline_format', data)
         this.say(str)
       }
     }
