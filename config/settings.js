@@ -6,7 +6,7 @@
  *
  * When the application starts, we run a series of initialization functions
  * that check if these settings are fields in the database.
- * 
+ *
  * If a setting is missing, we'll create the setting and give it a default value.
  * If you create a plugin, add your settings here if you wish to be able to access them.
  */
@@ -27,11 +27,17 @@ module.exports = {
 		announcement_enabled: false,
 		announce_stream_channel: '',
 		announce_stream_enabled: true,
+    announce_stream_format: 'Holy cow! Now playing {channel.status} ({game}) <{channel.url}>',
 
 		/**
 		 * Any other configuration...
 		 */
-		chat_relay_enabled: false
+		chat_relay_enabled: false,
+		announce_twitter_discord: false,
+		announce_twitter_twitch: false,
+		announce_retweet: false,
+
+    discord_test_format: 'Holy cow! It\'s {author.username}!'
 	}
 
 }

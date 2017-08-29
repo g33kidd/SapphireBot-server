@@ -26,21 +26,28 @@ module.exports = function twitch(sails) {
       let stream  = await Stream.findOne({started_at: created})
 
       if (count === 0) {
-        await Stream.create({started_at: created, views: status.viewers})
+        await Stream.create({started_at: created, views: status.viewers, current: true})
+        sails.emit('twitch:stream_created', status)
       } else {
-        let viewCount = (stream.views < status.viewers) 
-          ? status.viewers 
+        let viewCount = (stream.views < status.viewers)
+          ? status.viewers
           : stream.views
 
         await Stream.update({ started_at: created }, {
           views: viewCount,
           status: status.channel.status,
-          game: status.game
+          game: status.game,
+          current: true
         })
-        
+
         sails.log.debug("updated stream")
       }
     } else {
+      let current = await Stream.findOne({ current: true })
+      if(current) {
+        await Stream.update({ id: current.id }, { current: false })
+        sails.emit('twitch:stream_current_stoped', current)
+      }
       sails.log.debug("no stream found")
     }
   })
@@ -95,7 +102,7 @@ module.exports = function twitch(sails) {
 
   client.on('message', (channel, userstate, message, self) => {
     if (self) return;
-    
+
     let params = {channel, userstate, message}
 
     _.each(plugins, p => p.events.message(params))
@@ -105,7 +112,7 @@ module.exports = function twitch(sails) {
 
   // Connect the client.
   client.connect()
-  
+
   return {
     client: () => client,
     channel: () => channel,

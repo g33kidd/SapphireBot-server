@@ -30,6 +30,7 @@
     "sails-disk": "~0.10.9",
     "sails-mongo": "^0.12.2",
     "sails-postgresql": "^0.11.4",
+    "string-template": "^1.0.0",
     "tmi.js": "^1.2.1",
     "twitch-api-v5": "^2.0.2"
   },

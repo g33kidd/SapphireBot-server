@@ -1,3 +1,5 @@
+const formatUtils = require('../utils/formatUtils')
+
 module.exports = {
 
   initBotSettings () {
@@ -5,6 +7,17 @@ module.exports = {
   },
 
   initAppSettings () {
+  },
+
+
+  async get (key) {
+    await Settings.findOne({ key })
+  },
+
+  async getWithFormat (key, obj) {
+    let setting = await Settings.findOne({ key: key })
+    let format = formatUtils.format(setting.value, obj)
+    return format
   }
 
 }

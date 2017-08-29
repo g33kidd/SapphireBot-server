@@ -14,6 +14,10 @@ module.exports = {
 		},
 		game: {
 			type: 'string'
-		}
+		},
+    current: {
+      type: 'boolean',
+      defaultsTo: false
+    }
 	}
 }

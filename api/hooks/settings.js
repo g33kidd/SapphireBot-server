@@ -8,6 +8,9 @@ module.exports = function settings(sails) {
 			let exists = await Settings.count({ key: key })
 			if(!exists) {
 				await Settings.create({ key, value })
+				sails.log.debug(`created setting ${key}`)
+			} else {
+				sails.log.debug(`${key} exists`)
 			}
 		})
 	})
