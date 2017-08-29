@@ -37,6 +37,12 @@ module.exports = {
 		announce_twitter_twitch: false,
 		announce_retweet: false,
 
+    twitch_shoutout_live_format: 'PogChamp {channel.name} is playing {game} "{channel.status}"! Go check them out! {channel.url}',
+    twitch_shoutout_offline_format: 'BibleThump {name} is offline right now, but go check them out and give them a follow! {url}',
+
+    discord_shoutout_live_format: 'HOLY COW! {channel.name} is playing {game} "{channel.status}"! Go check them out! {channel.url}',
+    discord_shoutout_offline_format: '{name} is offline right now, but go check them out and give them a follow! {url}',
+
     discord_test_format: 'Holy cow! It\'s {author.username}!'
 	}
 

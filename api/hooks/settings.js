@@ -10,7 +10,13 @@ module.exports = function settings(sails) {
 				await Settings.create({ key, value })
 				sails.log.debug(`created setting ${key}`)
 			} else {
-				sails.log.debug(`${key} exists`)
+
+        if (process.env.NODE_ENV) {
+          await Settings.update({ key }, { value })
+          sails.log.debug(`${key} exists. updating...`)
+        } else {
+          sails.log.debug(`${key} exists`)
+        }
 			}
 		})
 	})

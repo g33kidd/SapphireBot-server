@@ -5,7 +5,7 @@ module.exports = {
   async slowmode (req, res) {
     TmiService.slowmodeOff()
   },
-  
+
   async followers (req, res) {
     let followerList = await TwitchService.followers()
     return res.json(followerList)
@@ -54,12 +54,13 @@ module.exports = {
   // Sends chat a message to checkout some other channel.
   async shoutout (req, res) {
     try {
-      let channel = await TmiService.shoutout(req.param('channel'))
+      await TmiService.shoutout(req.param('channel'))
+      await DiscordService.shoutout(req.param('channel'))
 
       if (req.param('with_host')) {
         await TmiService.host(req.param('channel'))
       }
-      
+
       return res.ok()
     } catch(err) {
       return res.serverError(err)

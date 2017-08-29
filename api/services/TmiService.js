@@ -1,7 +1,7 @@
 /**
  * Module for Twitch Messaging Interface stuff.
  * Anything here should be for interacting with TMIjs.
- * 
+ *
  * For other stuff that requires talking with the Twitch API, please see
  * the TwitchService.
  */
@@ -19,11 +19,17 @@ module.exports = {
 
   async shoutout (channel) {
     let data = await TwitchService.findChannel(channel)
+
     if (data) {
-      this.say(`PogChamp Go checkout this stream! ${data.url} Last seen playing: ${data.game}`)
-      return true
-    } else {
-      return false
+      let stream = await TwitchService.live(data._id)
+
+      if (stream) {
+        let str = await SettingsService.getWithFormat('twitch_shoutout_live_format', stream)
+        this.say(str)
+      } else {
+        let str = await SettingsService.getWithFormat('twitch_shotout_offline_format', data)
+        this.say(str)
+      }
     }
   },
 
