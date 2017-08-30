@@ -31,8 +31,10 @@
     "sails-mongo": "^0.12.2",
     "sails-postgresql": "^0.11.4",
     "string-template": "^1.0.0",
+    "tall": "^1.0.2",
     "tmi.js": "^1.2.1",
-    "twitch-api-v5": "^2.0.2"
+    "twitch-api-v5": "^2.0.2",
+    "url-unshort": "^5.0.0"
   },
   "scripts": {
     "debug": "node debug app.js",
